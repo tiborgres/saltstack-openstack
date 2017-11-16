@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "CREATE DATABASE {{ salt['pillar.get']('NEUTRON_DBNAME') }};" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NEUTRON_DBNAME') }}.* TO '{{ salt['pillar.get']('NEUTRON_DBNAME') }}'@'localhost' IDENTIFIED BY '{{ salt['pillar.get']('NEUTRON_DBPASS') }}';" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NEUTRON_DBNAME') }}.* TO '{{ salt['pillar.get']('NEUTRON_DBUSER') }}'@'%' IDENTIFIED BY '{{ salt['pillar.get']('NEUTRON_DBPASS') }}';" |mysql

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME={{ salt['pillar.get']('PROJECT_NAME') }}
+export OS_USERNAME={{ salt['pillar.get']('ADMIN_USER') }}
+export OS_PASSWORD={{ salt['pillar.get']('ADMIN_PASS') }}
+export OS_AUTH_URL=http://{{ salt['pillar.get']('dnsname_controller') }}:35357/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+
+openstack token issue
+
+openstack user create --domain default --password {{ salt['pillar.get']('NEUTRON_PASS') }} {{ salt['pillar.get']('NEUTRON_PASS') }}
+openstack role add --project service --user {{ salt['pillar.get']('NEUTRON_PASS') }} {{ salt['pillar.get']('ADMIN_ROLE') }}
+openstack service create --name neutron --description "OpenStack Networking" network
+openstack endpoint create --region RegionOne network public http://{{ salt['pillar.get']('dnsname_controller') }}:9696
+openstack endpoint create --region RegionOne network internal http://{{ salt['pillar.get']('dnsname_controller') }}:9696
+openstack endpoint create --region RegionOne network admin http://{{ salt['pillar.get']('dnsname_controller') }}:9696

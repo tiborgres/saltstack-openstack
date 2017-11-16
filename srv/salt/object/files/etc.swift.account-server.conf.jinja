@@ -1,0 +1,30 @@
+[DEFAULT]
+bind_ip = {{ salt['pillar.get']('mgmt_ip4_object') }}
+bind_port = 6202
+user = {{ salt['pillar.get']('SWIFT_USER') }}
+swift_dir = /etc/swift
+devices = {{ salt['pillar.get']('dir_structure') }}
+mount_check = true
+workers = 2
+
+[pipeline:main]
+pipeline = healthcheck recon account-server
+
+[app:account-server]
+use = egg:swift#account
+
+[filter:healthcheck]
+use = egg:swift#healthcheck
+
+[filter:recon]
+use = egg:swift#recon
+recon_cache_path = /var/cache/swift
+
+[account-replicator]
+
+[account-auditor]
+
+[account-reaper]
+
+[filter:xprofile]
+use = egg:swift#xprofile

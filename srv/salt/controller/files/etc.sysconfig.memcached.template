@@ -1,0 +1,5 @@
+PORT="{{ salt['pillar.get']('memcached:port') }}"
+USER="{{ salt['pillar.get']('memcached:user') }}"
+MAXCONN="{{ salt['pillar.get']('memcached:maxconn') }}"
+CACHESIZE="{{ salt['pillar.get']('memcached:cachesize') }}"
+OPTIONS="{{ salt['pillar.get']('memcached:options') }}"

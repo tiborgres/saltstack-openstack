@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "CREATE DATABASE {{ salt['pillar.get']('CINDER_DBNAME') }};" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('CINDER_DBNAME') }}.* TO '{{ salt['pillar.get']('CINDER_DBNAME') }}'@'localhost' IDENTIFIED BY '{{ salt['pillar.get']('CINDER_DBPASS') }}';" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('CINDER_DBNAME') }}.* TO '{{ salt['pillar.get']('CINDER_DBUSER') }}'@'%' IDENTIFIED BY '{{ salt['pillar.get']('CINDER_DBPASS') }}';" |mysql

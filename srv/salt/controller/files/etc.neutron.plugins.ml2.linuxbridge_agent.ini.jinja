@@ -1,0 +1,15 @@
+[DEFAULT]
+
+[agent]
+
+[linux_bridge]
+physical_interface_mappings = provider:{{ salt['pillar.get']('PROVIDER_INTERFACE_NAME') }}
+
+[securitygroup]
+enable_security_group = true
+firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+
+[vxlan]
+enable_vxlan = true
+local_ip = {{ salt['pillar.get']('mgmt_ip4_controller') }}
+l2_population = true

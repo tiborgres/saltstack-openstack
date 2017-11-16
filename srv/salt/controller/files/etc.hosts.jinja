@@ -1,0 +1,3 @@
+{%- for ip_address, hosts in salt['pillar.get']('etchosts', {}).iteritems() -%}
+{{ ip_address }}	{{ hosts }}
+{% endfor %}

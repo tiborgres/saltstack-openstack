@@ -1,0 +1,34 @@
+[DEFAULT]
+
+[database]
+connection = mysql+pymysql://{{ salt['pillar.get']('GLANCE_DBUSER') }}:{{ salt['pillar.get']('GLANCE_DBPASS') }}@{{ salt['pillar.get']('dnsname_controller') }}/{{ salt['pillar.get']('GLANCE_DBNAME') }}
+
+[keystone_authtoken]
+auth_uri = http://{{ salt['pillar.get']('dnsname_controller') }}:5000
+auth_url = http://{{ salt['pillar.get']('dnsname_controller') }}:35357
+memcached_servers = {{ salt['pillar.get']('dnsname_controller') }}:11211
+auth_type = password
+project_domain_name = default
+user_domain_name = default
+project_name = service
+username = {{ salt['pillar.get']('GLANCE_USER') }}
+password = {{ salt['pillar.get']('GLANCE_PASS') }}
+
+[matchmaker_redis]
+
+[oslo_messaging_amqp]
+
+[oslo_messaging_kafka]
+
+[oslo_messaging_notifications]
+
+[oslo_messaging_rabbit]
+
+[oslo_messaging_zmq]
+
+[oslo_policy]
+
+[paste_deploy]
+flavor = keystone
+
+[profiler]

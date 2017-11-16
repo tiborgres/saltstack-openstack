@@ -1,0 +1,25 @@
+#!/bin/bash
+
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME={{ salt['pillar.get']('PROJECT_NAME') }}
+export OS_USERNAME={{ salt['pillar.get']('ADMIN_USER') }}
+export OS_PASSWORD={{ salt['pillar.get']('ADMIN_PASS') }}
+export OS_AUTH_URL=http://{{ salt['pillar.get']('dnsname_controller') }}:35357/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+
+openstack token issue
+
+openstack user create --domain default --password {{ salt['pillar.get']('NOVA_PASS') }} {{ salt['pillar.get']('NOVA_USER') }}
+openstack role add --project service --user {{ salt['pillar.get']('NOVA_USER') }} {{ salt['pillar.get']('ADMIN_ROLE') }}
+openstack service create --name nova --description "OpenStack Compute" compute
+openstack endpoint create --region RegionOne compute public http://{{ salt['pillar.get']('dnsname_controller') }}:8774/v2.1
+openstack endpoint create --region RegionOne compute internal http://{{ salt['pillar.get']('dnsname_controller') }}:8774/v2.1
+openstack endpoint create --region RegionOne compute admin http://{{ salt['pillar.get']('dnsname_controller') }}:8774/v2.1
+openstack user create --domain default --password {{ salt['pillar.get']('PLACEMENT_PASS') }} {{ salt['pillar.get']('PLACEMENT_USER') }}
+openstack role add --project service --user {{ salt['pillar.get']('PLACEMENT_USER') }} {{ salt['pillar.get']('ADMIN_ROLE') }}
+openstack service create --name placement --description "Placement API" placement
+openstack endpoint create --region RegionOne placement public http://{{ salt['pillar.get']('dnsname_controller') }}:8778
+openstack endpoint create --region RegionOne placement internal http://{{ salt['pillar.get']('dnsname_controller') }}:8778
+openstack endpoint create --region RegionOne placement admin http://{{ salt['pillar.get']('dnsname_controller') }}:8778

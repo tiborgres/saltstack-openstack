@@ -1,0 +1,23 @@
+uid = {{ salt['pillar.get']('SWIFT_USER') }}
+gid = {{ salt['pillar.get']('SWIFT_GROUP') }}
+log file = /var/log/rsyncd.log
+pid file = /var/run/rsyncd.pid
+address = {{ salt['pillar.get']('mgmt_ip4_object') }}
+
+[account]
+max connections = 2
+path = {{ salt['pillar.get']('dir_structure') }}
+read only = False
+lock file = /var/lock/account.lock
+
+[container]
+max connections = 2
+path = {{ salt['pillar.get']('dir_structure') }}
+read only = False
+lock file = /var/lock/container.lock
+
+[object]
+max connections = 2
+path = {{ salt['pillar.get']('dir_structure') }}
+read only = False
+lock file = /var/lock/object.lock

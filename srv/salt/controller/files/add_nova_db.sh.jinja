@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "CREATE DATABASE {{ salt['pillar.get']('NOVA_API_DBNAME') }};" |mysql
+echo "CREATE DATABASE {{ salt['pillar.get']('NOVA_DBNAME') }};" |mysql
+echo "CREATE DATABASE {{ salt['pillar.get']('NOVA_CELL0_DBNAME') }};" |mysql
+
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NOVA_API_DBNAME') }}.* TO '{{ salt['pillar.get']('NOVA_DBUSER') }}'@'localhost' IDENTIFIED BY '{{ salt['pillar.get']('NOVA_DBPASS') }}';" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NOVA_API_DBNAME') }}.* TO '{{ salt['pillar.get']('NOVA_DBUSER') }}'@'%' IDENTIFIED BY '{{ salt['pillar.get']('NOVA_DBPASS') }}';" |mysql
+
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NOVA_DBNAME') }}.* TO '{{ salt['pillar.get']('NOVA_DBUSER') }}'@'localhost' IDENTIFIED BY '{{ salt['pillar.get']('NOVA_DBPASS') }}';" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NOVA_DBNAME') }}.* TO '{{ salt['pillar.get']('NOVA_DBUSER') }}'@'%' IDENTIFIED BY '{{ salt['pillar.get']('NOVA_DBPASS') }}';" |mysql
+
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NOVA_CELL0_DBNAME') }}.* TO '{{ salt['pillar.get']('NOVA_DBUSER') }}'@'localhost' IDENTIFIED BY '{{ salt['pillar.get']('NOVA_DBPASS') }}';" |mysql
+echo "GRANT ALL PRIVILEGES ON {{ salt['pillar.get']('NOVA_CELL0_DBNAME') }}.* TO '{{ salt['pillar.get']('NOVA_DBUSER') }}'@'%' IDENTIFIED BY '{{ salt['pillar.get']('NOVA_DBPASS') }}';" |mysql

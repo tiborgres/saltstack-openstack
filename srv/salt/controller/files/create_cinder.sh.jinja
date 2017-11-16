@@ -1,0 +1,23 @@
+#!/bin/bash
+
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME={{ salt['pillar.get']('PROJECT_NAME') }}
+export OS_USERNAME={{ salt['pillar.get']('ADMIN_USER') }}
+export OS_PASSWORD={{ salt['pillar.get']('ADMIN_PASS') }}
+export OS_AUTH_URL=http://{{ salt['pillar.get']('dnsname_controller') }}:35357/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+
+openstack token issue
+
+openstack user create --domain default --password {{ salt['pillar.get']('CINDER_PASS') }} {{ salt['pillar.get']('CINDER_PASS') }}
+openstack role add --project service --user {{ salt['pillar.get']('CINDER_PASS') }} {{ salt['pillar.get']('ADMIN_ROLE') }}
+openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
+openstack service create --name cinderv3 --description "OpenStack Block Storage" volumev3
+openstack endpoint create --region RegionOne volumev2 public http://{{ salt['pillar.get']('dnsname_controller') }}:8776/v2/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev2 internal http://{{ salt['pillar.get']('dnsname_controller') }}:8776/v2/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev2 admin http://{{ salt['pillar.get']('dnsname_controller') }}:8776/v2/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev3 public http://{{ salt['pillar.get']('dnsname_controller') }}:8776/v3/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev3 internal http://{{ salt['pillar.get']('dnsname_controller') }}:8776/v3/%\(project_id\)s
+openstack endpoint create --region RegionOne volumev3 admin http://{{ salt['pillar.get']('dnsname_controller') }}:8776/v3/%\(project_id\)s

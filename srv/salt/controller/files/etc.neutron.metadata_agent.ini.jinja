@@ -1,0 +1,7 @@
+[DEFAULT]
+nova_metadata_host = {{ salt['pillar.get']('dnsname_controller') }}
+metadata_proxy_shared_secret = {{ salt['pillar.get']('METADATA_SECRET') }}
+
+[agent]
+
+[cache]
