@@ -1,22 +1,17 @@
 {% from 'common.sls' import zabbix_ip4 %}
 
 os_version: 7
-fqdn: {{ dnsname_compute }}
-zabbix-agent_ip: {{ mgmt_ip4_compute }}
+fqdn: {{ dnsname_object2 }}
+zabbix-agent_ip: {{ mgmt_ip4_object2 }}
 
-# OpenStack compute (nova)
-NOVA_API_DBNAME:        nova_api
-NOVA_CELL0_DBNAME:      nova_cell0
-NOVA_DBNAME:            nova
-NOVA_DBUSER:            nova
-NOVA_DBPASS:            c3fb240f9fffd5e667b3
-NOVA_USER:              nova
-NOVA_GROUP:             nova
-NOVA_PASS:              5b8c138278a818058258
-NOVA_LOCKPATH:          /var/lib/nova/tmp
-PLACEMENT_USER:         placement
-PLACEMENT_PASS:         1b2e994ebea27d11db81
-RABBIT_PASS:            a62ad6014f8a305a02b5
+# OpenStack object2 (swift)
+PLACEMENT_USER:               placement
+PLACEMENT_PASS:               1b2e994ebea27d11db81
+RABBIT_PASS:                  a62ad6014f8a305a02b5
+SWIFT_USER:                   swift
+SWIFT_GROUP:                  swift
+SWIFT_PASS:                   qui1shaht9Ohtum3aiFo
+SWIFT_SERVICE:                swift
 
 {% set mgmt_ip4_controller    = '192.168.100.151' %}
 {% set vms_ip4_controller     = '192.168.101.151' %}
@@ -60,3 +55,6 @@ etchosts:
   {{ mgmt_ip4_object1 }}:     {{ dnsname_object1 }}
   {{ mgmt_ip4_object2 }}:     {{ dnsname_object2 }}
   {{ mgmt_ip4_object3 }}:     {{ dnsname_object3 }}
+
+object_storage:               sdb
+dir_structure:                /srv/node

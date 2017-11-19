@@ -1,7 +1,7 @@
 # /etc/hosts
 /etc/hosts:
   file.managed:
-    - source: salt://controller/files/etc.hosts.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.hosts.jinja
     - template: jinja
     - user: root
     - group: root
@@ -41,7 +41,7 @@ mariadb-server:
 
 /etc/my.cnf.d/openstack.cnf:
   file.managed:
-    - source: salt://controller/files/mariadb_openstack.cnf.template
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/mariadb_openstack.cnf.template
     - template: jinja
     - user: root
     - group: root
@@ -59,7 +59,7 @@ mysql secure script:
 
 /root/.my.cnf:
   file.managed:
-    - source: salt://controller/files/root.my.cnf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/root.my.cnf.jinja
     - template: jinja
     - user: root
     - group: root
@@ -81,7 +81,7 @@ chrony:
 
 /etc/chrony.conf:
   file.managed:
-    - source: salt://controller/files/chrony.conf.template
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/chrony.conf.template
     - template: jinja
     - user: root
     - group: root
@@ -138,7 +138,7 @@ memcached:
 
 /etc/sysconfig/memcached:
   file.managed:
-    - source: salt://controller/files/etc.sysconfig.memcached.template
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.sysconfig.memcached.template
     - template: jinja
     - require:
       - pkg: memcached
@@ -146,7 +146,7 @@ memcached:
       - service: memcached
 
 # keystone section
-salt://controller/files/add_keystone_db.sh.jinja:
+salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_keystone_db.sh.jinja:
   cmd.script:
     - template: jinja
     - onchanges:
@@ -177,7 +177,7 @@ mod_wsgi:
 
 /etc/httpd/conf/httpd.conf:
   file.managed:
-    - source: salt://controller/files/etc.httpd.conf.httpd.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.httpd.conf.httpd.conf.jinja
     - template: jinja
     - user: root
     - group: root
@@ -198,7 +198,7 @@ mod_wsgi:
 
 /etc/keystone/keystone.conf:
   file.managed:
-    - source: salt://controller/files/etc.keystone.keystone.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.keystone.keystone.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('KEYSTONE_GROUP') }}
@@ -238,7 +238,7 @@ keystone bootstrap:
 
 /root/admin-rc:
   file.managed:
-    - source: salt://controller/files/root.admin-rc.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/root.admin-rc.jinja
     - template: jinja
     - user: root
     - group: root
@@ -251,7 +251,7 @@ keystone bootstrap:
 
 /root/demo-rc:
   file.managed:
-    - source: salt://controller/files/root.demo-rc.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/root.demo-rc.jinja
     - template: jinja
     - user: root
     - group: root
@@ -261,7 +261,7 @@ keystone bootstrap:
 
 openstack token issue:
   cmd.script:
-    - name: salt://controller/files/openstack_token_issue.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/openstack_token_issue.sh.jinja
     - template: jinja
     - require:
       - file: /root/admin-rc
@@ -270,7 +270,7 @@ openstack token issue:
 
 create domain, projects, users and roles:
   cmd.script:
-    - name: salt://controller/files/create_domain_projects_users_roles.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/create_domain_projects_users_roles.sh.jinja
     - template: jinja
     - require:
       - file: /root/admin-rc
@@ -279,7 +279,7 @@ create domain, projects, users and roles:
 
 create glance:
   cmd.script:
-    - name: salt://controller/files/create_glance.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/create_glance.sh.jinja
     - template: jinja
     - require:
       - cmd: create domain, projects, users and roles
@@ -295,7 +295,7 @@ openstack-glance:
 
 /etc/glance/glance-api.conf:
   file.managed:
-    - source: salt://controller/files/etc.glance.glance-api.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.glance.glance-api.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('GLANCE_GROUP') }}
@@ -305,7 +305,7 @@ openstack-glance:
 
 /etc/glance/glance-registry.conf:
   file.managed:
-    - source: salt://controller/files/etc.glance.glance-registry.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.glance.glance-registry.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('GLANCE_GROUP') }}
@@ -340,7 +340,7 @@ openstack-glance-registry:
       - cmd: populate glance db
 
 # nova section
-salt://controller/files/add_nova_db.sh.jinja:
+salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_nova_db.sh.jinja:
   cmd.script:
     - template: jinja
     - onchanges:
@@ -348,7 +348,7 @@ salt://controller/files/add_nova_db.sh.jinja:
 
 create nova user:
   cmd.script:
-    - name: salt://controller/files/create_nova_user.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/create_nova_user.sh.jinja
     - template: jinja
     - require:
       - file: /root/admin-rc
@@ -440,7 +440,7 @@ openstack-nova-consoleauth:
 
 /etc/nova/nova.conf:
   file.managed:
-    - source: salt://controller/files/etc.nova.nova.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.nova.nova.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NOVA_GROUP') }}
@@ -451,7 +451,7 @@ openstack-nova-consoleauth:
 /etc/httpd/conf.d/00-nova-placement-api.conf:
   file.append:
     - sources:
-      - salt://controller/files/etc.httpd.conf.d.00-nova-placement-api.conf.append
+      - salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.httpd.conf.d.00-nova-placement-api.conf.append
     - require:
       - pkg: openstack-nova-placement-api
       - pkg: httpd
@@ -497,7 +497,7 @@ populate nova db:
       - cmd: create cell1 database
 
 # neutron section
-salt://controller/files/add_neutron_db.sh.jinja:
+salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_neutron_db.sh.jinja:
   cmd.script:
     - template: jinja
     - onchanges:
@@ -505,12 +505,12 @@ salt://controller/files/add_neutron_db.sh.jinja:
 
 create neutron:
   cmd.script:
-    - name: salt://controller/files/create_neutron.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/create_neutron.sh.jinja
     - template: jinja
     - require:
-      - cmd: salt://controller/files/add_neutron_db.sh.jinja
+      - cmd: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_neutron_db.sh.jinja
     - onchanges:
-      - cmd: salt://controller/files/add_neutron_db.sh.jinja
+      - cmd: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_neutron_db.sh.jinja
 
 {% for neutron_pkg in ['openstack-neutron','openstack-neutron-ml2','openstack-neutron-linuxbridge','ebtables'] %}
 {{ neutron_pkg }}:
@@ -522,7 +522,7 @@ create neutron:
 
 /etc/neutron/neutron.conf:
   file.managed:
-    - source: salt://controller/files/etc.neutron.neutron.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.neutron.neutron.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NEUTRON_GROUP') }}
@@ -532,7 +532,7 @@ create neutron:
 
 /etc/neutron/plugins/ml2/ml2_conf.ini:
   file.managed:
-    - source: salt://controller/files/etc.neutron.plugins.ml2.ml2_conf.ini.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.neutron.plugins.ml2.ml2_conf.ini.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NEUTRON_GROUP') }}
@@ -542,7 +542,7 @@ create neutron:
 
 /etc/neutron/plugins/ml2/linuxbridge_agent.ini:
   file.managed:
-    - source: salt://controller/files/etc.neutron.plugins.ml2.linuxbridge_agent.ini.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.neutron.plugins.ml2.linuxbridge_agent.ini.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NEUTRON_GROUP') }}
@@ -552,7 +552,7 @@ create neutron:
 
 /etc/neutron/l3_agent.ini:
   file.managed:
-    - source: salt://controller/files/etc.neutron.l3_agent.ini.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.neutron.l3_agent.ini.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NEUTRON_GROUP') }}
@@ -562,7 +562,7 @@ create neutron:
 
 /etc/neutron/dhcp_agent.ini:
   file.managed:
-    - source: salt://controller/files/etc.neutron.dhcp_agent.ini.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.neutron.dhcp_agent.ini.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NEUTRON_GROUP') }}
@@ -572,7 +572,7 @@ create neutron:
 
 /etc/neutron/metadata_agent.ini:
   file.managed:
-    - source: salt://controller/files/etc.neutron.metadata_agent.ini.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.neutron.metadata_agent.ini.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('NEUTRON_GROUP') }}
@@ -590,7 +590,7 @@ populate neutron db:
   cmd.run:
     - name: su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" {{ salt['pillar.get']('NEUTRON_USER') }}
     - onchanges:
-      - cmd: salt://controller/files/add_neutron_db.sh.jinja
+      - cmd: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_neutron_db.sh.jinja
 
 {% for neutron_service in ['neutron-server','neutron-linuxbridge-agent','neutron-dhcp-agent','neutron-metadata-agent','neutron-l3-agent'] %}
 {{ neutron_service }}:
@@ -610,7 +610,7 @@ openstack-dashboard:
 
 /etc/openstack-dashboard/local_settings:
   file.managed:
-    - source: salt://controller/files/etc.openstack-dashboard.local_settings.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.openstack-dashboard.local_settings.jinja
     - template: jinja
     - user: root
     - group: apache
@@ -622,7 +622,7 @@ openstack-dashboard:
       - service: memcached
 
 # cinder section
-salt://controller/files/add_cinder_db.sh.jinja:
+salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_cinder_db.sh.jinja:
   cmd.script:
     - template: jinja
     - onchanges:
@@ -630,12 +630,12 @@ salt://controller/files/add_cinder_db.sh.jinja:
 
 create cinder:
   cmd.script:
-    - name: salt://controller/files/create_cinder.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/create_cinder.sh.jinja
     - template: jinja
     - require:
-      - cmd: salt://controller/files/add_cinder_db.sh.jinja
+      - cmd: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_cinder_db.sh.jinja
     - onchanges:
-      - cmd: salt://controller/files/add_cinder_db.sh.jinja
+      - cmd: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/add_cinder_db.sh.jinja
 
 openstack-cinder:
   pkg.installed:
@@ -645,7 +645,7 @@ openstack-cinder:
 
 /etc/cinder/cinder.conf:
   file.managed:
-    - source: salt://controller/files/etc.cinder.cinder.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.cinder.cinder.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('CINDER_GROUP') }}
@@ -685,7 +685,7 @@ openstack-swift-proxy:
 
 /etc/swift/proxy-server.conf:
   file.managed:
-    - source: salt://controller/files/etc.swift.proxy-server.conf.jinja
+    - source: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/etc.swift.proxy-server.conf.jinja
     - template: jinja
     - user: root
     - group: {{ salt['pillar.get']('SWIFT_GROUP') }}
@@ -695,7 +695,7 @@ openstack-swift-proxy:
 
 create swift:
   cmd.script:
-    - name: salt://controller/files/create_swift.sh.jinja
+    - name: salt://{{ salt['pillar.get']('SALT_DIR') }}/files/create_swift.sh.jinja
     - template: jinja
     - require:
       - pkg: openstack-swift-proxy
@@ -708,10 +708,10 @@ swift-ring-builder account.builder create 10 {{ salt['pillar.get']('swift:number
     - cwd: /etc/swift
     - require:
       - cmd: create swift
-#    - onchanges:
-#      - cmd: create swift
+    - onchanges:
+      - cmd: create swift
 
-swift-ring-builder account.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6202 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100:
+swift-ring-builder account.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6202 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100:
   cmd.run:
     - cwd: /etc/swift
     - require:
@@ -723,9 +723,9 @@ swift-ring-builder account.builder rebalance:
   cmd.run:
     - cwd: /etc/swift
     - require:
-      - cmd: swift-ring-builder account.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6202 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
+      - cmd: swift-ring-builder account.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6202 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
     - onchanges:
-      - cmd: swift-ring-builder account.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6202 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
+      - cmd: swift-ring-builder account.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6202 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
 
 # container ring
 swift-ring-builder container.builder create 10 {{ salt['pillar.get']('swift:number_of_replica') }} 1:
@@ -736,7 +736,7 @@ swift-ring-builder container.builder create 10 {{ salt['pillar.get']('swift:numb
     - onchanges:
       - cmd: swift-ring-builder account.builder rebalance
 
-swift-ring-builder container.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6201 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100:
+swift-ring-builder container.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6201 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100:
   cmd.run:
     - cwd: /etc/swift
     - require:
@@ -748,9 +748,9 @@ swift-ring-builder container.builder rebalance:
   cmd.run:
     - cwd: /etc/swift
     - require:
-      - cmd: swift-ring-builder container.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6201 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
+      - cmd: swift-ring-builder container.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6201 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
     - onchanges:
-      - cmd: swift-ring-builder container.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6201 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
+      - cmd: swift-ring-builder container.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6201 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
 
 # object ring
 swift-ring-builder object.builder create 10 {{ salt['pillar.get']('swift:number_of_replica') }} 1:
@@ -761,7 +761,7 @@ swift-ring-builder object.builder create 10 {{ salt['pillar.get']('swift:number_
     - onchanges:
       - cmd: swift-ring-builder container.builder rebalance
 
-swift-ring-builder object.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6200 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100:
+swift-ring-builder object.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6200 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100:
   cmd.run:
     - cwd: /etc/swift
     - require:
@@ -773,7 +773,7 @@ swift-ring-builder object.builder rebalance:
   cmd.run:
     - cwd: /etc/swift
     - require:
-      - cmd: swift-ring-builder object.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6200 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
+      - cmd: swift-ring-builder object.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6200 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
     - onchanges:
-      - cmd: swift-ring-builder object.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object') }} --port 6200 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
+      - cmd: swift-ring-builder object.builder add --region 1 --zone 1 --ip {{ salt['pillar.get']('mgmt_ip4_object1') }} --port 6200 --device {{ salt['pillar.get']('swift:object_storage') }} --weight 100
 

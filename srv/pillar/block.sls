@@ -1,3 +1,10 @@
+{% from 'common.sls' import zabbix_ip4 %}
+
+os_version: 7
+fqdn: {{ dnsname_block }}
+zabbix-agent_ip: {{ mgmt_ip4_block }}
+
+# OpenStack block (cinder)
 CINDER_DBNAME:                cinder
 CINDER_DBPASS:                390ffbcb37603b185461
 CINDER_USER:                  cinder
@@ -28,8 +35,18 @@ RABBIT_PASS:                  a62ad6014f8a305a02b5
 {% set dnsname_object3        = 'object3' %}
 
 mgmt_ip4_controller:          {{ mgmt_ip4_controller }}
+mgmt_ip4_compute:             {{ mgmt_ip4_compute }}
 mgmt_ip4_block:               {{ mgmt_ip4_block }}
+mgmt_ip4_object1:             {{ mgmt_ip4_object1 }}
+mgmt_ip4_object2:             {{ mgmt_ip4_object2 }}
+mgmt_ip4_object3:             {{ mgmt_ip4_object3 }}
+
 dnsname_controller:           {{ dnsname_controller }}
+dnsname_compute:              {{ dnsname_compute }}
+dnsname_block:                {{ dnsname_block }}
+dnsname_object1:              {{ dnsname_object1 }}
+dnsname_object2:              {{ dnsname_object2 }}
+dnsname_object3:              {{ dnsname_object3 }}
 
 # /etc/hosts file
 etchosts:
